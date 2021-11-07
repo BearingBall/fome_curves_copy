@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFrameworks>net4;netcoreapp3.0</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>2.4.2.1</Version>
+    <AssemblyVersion>2.4.2.1</AssemblyVersion>
+    <FileVersion>2.4.2.1</FileVersion>
+    <Company>Open Source</Company>
+    <Product>NumericUpDownLib</Product>
+    <Copyright>2013-2020</Copyright>
+    <Description>Provides a numeric up down WPF control that can be used to edit (integer, byte, decimal, double, float, short and many more) values with a textbox and/or up/down arrow (repeat) buttons. Editing can be based on input via mouse wheel, mouse drag, cursor keys, or text editing.</Description>
+    <PackageProjectUrl>https://github.com/Dirkster99/NumericUpDownLib</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Dirkster99/NumericUpDownLib</RepositoryUrl>
+    <PackageId>Dirkster.NumericUpDownLib</PackageId>
+    <Authors>https://github.com/Dirkster99/NumericUpDownLib</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>numericupdown numeric up down integer float double percentage increment decrement custom wpf control mvvm c# .net metro black light themed control library</PackageTags>
+    <PackageReleaseNotes>BugFix PR #10 Do not clear focus when the control change its visibility and its not focused</PackageReleaseNotes>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageIcon>SyncArrow_64x.png</PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="images/SyncArrow_64x.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--Compile Update="Base\AbstractBaseUpDown.xaml.cs">
+      <DependentUpon>AbstractBaseUpDown.xaml</DependentUpon>
+    </Compile-->
+    <Compile Update="Base\NumericRepeatButtonControl.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>NumericRepeatButtonControl.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\InputBaseUpDown.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Base\NumericRepeatButtonControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\DarkBrushs.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Themes\LightBrushs.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>
