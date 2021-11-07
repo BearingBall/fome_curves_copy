@@ -35,6 +35,7 @@ namespace fome_curves
         public List<double> ElectronConcentration = new List<double>(); //Electron concentration
         public List<double> HoleConcentration = new List<double>(); //Hole concentration
         public List<double> Sigma = new List<double>(); //Conductivity
+        public List<double> Resistivity = new List<double>(); //Resistivity
         public List<double> Nc = new List<double>();
         public List<double> Nv = new List<double>();
     }
@@ -184,8 +185,44 @@ namespace fome_curves
 
             return output;
         }
+        Output fillConductivity(Semiconductor semiconductor, double T, double dN = 1e18, double from = 1e10, double to = 1e20)
+        {
+            Output output = new Output();
+            int count = 0;
+            for (double n = from; n <= to; n += dN)
+            {
+                output.Na.Add(n);
+                output.Nc.Add(PhysicsCalculations.getEffectiveDensityState(semiconductor.me, T));
+                output.Nv.Add(PhysicsCalculations.getEffectiveDensityState(semiconductor.mh, T));
+                var Ef = PhysicsCalculations.getFermi(output.Nc[count], output.Nv[count], T, n, parameters.Nd0,
+                    semiconductor.Eg, parameters.Ea, parameters.Ed);
+                output.ElectronConcentration.Add(PhysicsCalculations.getN(output.Nc[count], semiconductor.Eg, Ef, T));
+                output.HoleConcentration.Add(PhysicsCalculations.getP(output.Nv[count], Ef, T));
+
+                output.ElectronsMobility.Add(PhysicsCalculations.getMobility(semiconductor.Ae, semiconductor.Be, parameters.Nd0, n, T));
+                output.HolesMobility.Add(PhysicsCalculations.getMobility(semiconductor.Ah, semiconductor.Bh, parameters.Nd0, n, T));
+                output.Sigma.Add(PhysicsCalculations.getConductivity(output.ElectronConcentration[count], output.HoleConcentration[count], output.ElectronsMobility[count], output.HolesMobility[count]));
+                count++;
+            }
+
+            return output;
+        }
+
+        Output fillResistivity(Semiconductor semiconductor, double T, double dN = 1e18, double from = 1e10,
+            double to = 1e20)
+        {
+            var output = fillConductivity(semiconductor, T, dN, from, to);
+
+            for (int i = 0; i < output.Sigma.Count; i++)
+            {
+                output.Resistivity.Add(1.0/output.Sigma[i]);
+            }
+
+            return output;
+        }
+
         //TODO handle exceptions
-        void saveSemiconductorProperties(Semiconductor semiconductor, string path)
+            void saveSemiconductorProperties(Semiconductor semiconductor, string path)
         {
             string jsonString = JsonSerializer.Serialize(semiconductor);
             File.WriteAllText(path, jsonString);
@@ -210,11 +247,16 @@ namespace fome_curves
             InitializeComponent();
 
             wpfPlot1.Plot.Style(ScottPlot.Style.Seaborn);
+            wpfPlot2.Plot.Style(ScottPlot.Style.Seaborn);
+            wpfPlot3.Plot.Style(ScottPlot.Style.Seaborn);
+            wpfPlot4.Plot.Style(ScottPlot.Style.Seaborn);
 
             semiconductor = readSemiconductor("Semiconductors/Si.json");
 
             recalculateMobilityNa();
             recalculateMobilityT();
+            recalculateConductivity();
+            recalculateResistivity();
         }
 
         (double[], string[]) generatelabels(double from, int steps)
@@ -230,6 +272,26 @@ namespace fome_curves
             }
 
             return (values, labels);
+        }
+        private void recalculateResistivity()
+        {
+            var res = fillResistivity(semiconductor, _T);
+
+            DataPlotter.clear(wpfPlot3);
+            DataPlotter.plotData(new PlotData() { xData = res.Na.ToArray(), yData = res.Resistivity.ToArray(), xLabel = "Na, 1/cm³", yLabel = "Resistance, Om * cm" }, wpfPlot3);
+
+            wpfPlot3.Plot.XAxis.ManualTickPositions(new double[] { 1e10, 1e20 }, new string[] { "1e10", "1e20" });
+            DataPlotter.refresh(wpfPlot3);
+        }
+        private void recalculateConductivity()
+        {
+            var res = fillConductivity(semiconductor, _T);
+
+            DataPlotter.clear(wpfPlot4);
+            DataPlotter.plotData(new PlotData() { xData = res.Na.ToArray(), yData = res.Sigma.ToArray(), xLabel = "Na, 1/cm³", yLabel = "Conductivity, *" }, wpfPlot4);
+
+            wpfPlot4.Plot.XAxis.ManualTickPositions(new double[] { 1e10, 1e20 }, new string[] { "1e10", "1e20" });
+            DataPlotter.refresh(wpfPlot4);
         }
         private void recalculateMobilityNa()
         {

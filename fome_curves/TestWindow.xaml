@@ -10,12 +10,18 @@
   <Grid>
     <DockPanel Background="GhostWhite" Margin="175,0,0,0">
       <TabControl Margin="0,10,0,0" >
-        <TabItem Header="Mob(Na)">
+        <TabItem Header="Mob (Na)">
           <WpfPlot Name="wpfPlot1" />
         </TabItem>
-        <TabItem Header="Mob(T)">
+        <TabItem Header="Mob (T)">
           <WpfPlot Name="wpfPlot2" />
         </TabItem>
+          <TabItem Header="ρ (Na)">
+              <WpfPlot Name="wpfPlot3" />
+          </TabItem>
+          <TabItem Header="σ (Na)">
+              <WpfPlot Name="wpfPlot4" />
+          </TabItem>
       </TabControl>
     </DockPanel>
     <TextBox HorizontalAlignment="Left" 
