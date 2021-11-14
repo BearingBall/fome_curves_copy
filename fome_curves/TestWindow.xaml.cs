@@ -47,6 +47,23 @@ namespace fome_curves
         private readonly ScatterPlot HighlightedPoint;
         int _T = 600;
 
+        #region MaterialList
+
+        private List<string> materials = new List<string>()
+        {
+          "material1",
+          "material2",
+          "material3"
+        };
+
+        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+          string selected_item = ((sender as ListBox).SelectedItem as string);
+        }
+
+        #endregion
+
+
         public double Tmin
         {
           get => parameters.TMin;
@@ -78,7 +95,7 @@ namespace fome_curves
           get => parameters.TStep;
           set
           {
-            if (value >= Tmax - Tmin)
+            if (value >= Tmax - Tmin || value < 1)
               return;
 
             parameters.TStep = value;
@@ -257,6 +274,9 @@ namespace fome_curves
             recalculateMobilityT();
             recalculateConductivity();
             recalculateResistivity();
+
+            MaterialBox.SelectionMode = SelectionMode.Single;
+            MaterialBox.ItemsSource = materials;
         }
 
         (double[], string[]) generatelabels(double from, int steps)

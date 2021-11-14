@@ -16,12 +16,12 @@
         <TabItem Header="Mob (T)">
           <WpfPlot Name="wpfPlot2" />
         </TabItem>
-          <TabItem Header="ρ (Na)">
-              <WpfPlot Name="wpfPlot3" />
-          </TabItem>
-          <TabItem Header="σ (Na)">
-              <WpfPlot Name="wpfPlot4" />
-          </TabItem>
+        <TabItem Header="ρ (Na)">
+          <WpfPlot Name="wpfPlot3" />
+        </TabItem>
+        <TabItem Header="σ (Na)">
+          <WpfPlot Name="wpfPlot4" />
+        </TabItem>
       </TabControl>
     </DockPanel>
     <TextBox HorizontalAlignment="Left" 
@@ -50,5 +50,7 @@
       <Label Content="K" HorizontalAlignment="Left" Margin="96,31,0,0" VerticalAlignment="Top"/>
       <Label Content="K" HorizontalAlignment="Left" Margin="96,62,0,0" VerticalAlignment="Top"/>
     </Grid>
+    <ListBox x:Name="MaterialBox" HorizontalAlignment="Left" Height="110" Margin="10,161,0,0" VerticalAlignment="Top" Width="141" SelectionChanged="Selector_OnSelectionChanged"/>
+    <Label Content="Material:" HorizontalAlignment="Left" Margin="10,136,0,0" VerticalAlignment="Top" Width="141" Height="25"/>
   </Grid>
 </Window>
