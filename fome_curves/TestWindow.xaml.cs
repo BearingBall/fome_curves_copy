@@ -23,42 +23,30 @@ using Color = System.Drawing.Color;
 
 namespace fome_curves
 {
-    class Output
-    {
-        public List<double> T = new List<double>(); //temperature
-        public List<double> ElectronsMobility = new List<double>(); //electron mobility
-        public List<double> HolesMobility = new List<double>(); //holes mobility
-        public List<double> Nd = new List<double>(); //
-        public List<double> Na = new List<double>();
-        public List<double> DonorConcentration = new List<double>(); //Charged donor concentration
-        public List<double> AcceptorConcentration = new List<double>(); //Charged acceptor concentration
-        public List<double> ElectronConcentration = new List<double>(); //Electron concentration
-        public List<double> HoleConcentration = new List<double>(); //Hole concentration
-        public List<double> Sigma = new List<double>(); //Conductivity
-        public List<double> Resistivity = new List<double>(); //Resistivity
-        public List<double> Nc = new List<double>();
-        public List<double> Nv = new List<double>();
-    }
+    
 
     public partial class TestWindow : Window
     {
         Random rand = new Random(0);
         private ScatterPlot MyScatterPlot;
         private readonly ScatterPlot HighlightedPoint;
-        int _T = 600;
+        double _T = 600;
 
         #region MaterialList
 
         private List<string> materials = new List<string>()
         {
-          "material1",
-          "material2",
-          "material3"
+          "Si",
+          "Ge",
+          "GaAs"
         };
 
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-          string selected_item = ((sender as ListBox).SelectedItem as string);
+        { 
+            string selected_item = ((sender as ListBox).SelectedItem as string);
+            semiconductor = semiconductors[(sender as ListBox).SelectedIndex];
+
+            recalculateEverything();
         }
 
         #endregion
@@ -103,7 +91,7 @@ namespace fome_curves
           }
         }
 
-    public int T
+        public double T
         {
             get => _T;
             set
@@ -239,7 +227,7 @@ namespace fome_curves
         }
 
         //TODO handle exceptions
-            void saveSemiconductorProperties(Semiconductor semiconductor, string path)
+        void saveSemiconductorProperties(Semiconductor semiconductor, string path)
         {
             string jsonString = JsonSerializer.Serialize(semiconductor);
             File.WriteAllText(path, jsonString);
@@ -253,6 +241,7 @@ namespace fome_curves
             return semiconductor;
         }
 
+        private List<Semiconductor> semiconductors;
         private Semiconductor semiconductor;
         Params parameters = new Params();
 
@@ -268,7 +257,13 @@ namespace fome_curves
             wpfPlot3.Plot.Style(ScottPlot.Style.Seaborn);
             wpfPlot4.Plot.Style(ScottPlot.Style.Seaborn);
 
-            semiconductor = readSemiconductor("Semiconductors/Si.json");
+            semiconductors = new List<Semiconductor>()
+            {
+                readSemiconductor("Semiconductors/Si.json"),
+                readSemiconductor("Semiconductors/Ge.json"),
+                readSemiconductor("Semiconductors/GaAs.json"),
+            };
+            semiconductor = semiconductors[0];
 
             recalculateMobilityNa();
             recalculateMobilityT();
@@ -277,6 +272,7 @@ namespace fome_curves
 
             MaterialBox.SelectionMode = SelectionMode.Single;
             MaterialBox.ItemsSource = materials;
+            MaterialBox.SelectedIndex = 0;
         }
 
         (double[], string[]) generatelabels(double from, int steps)
@@ -335,6 +331,13 @@ namespace fome_curves
             DataPlotter.refresh(wpfPlot2);
         }
 
+        void recalculateEverything()
+        {
+            recalculateMobilityT();
+            recalculateMobilityNa();
+            recalculateConductivity();
+            recalculateResistivity();
+        }
         private void wpfPlot1_MouseMove(object sender, MouseEventArgs e)
         {
         }
@@ -354,6 +357,11 @@ namespace fome_curves
           if (double.TryParse(dTBox?.Text, out result) && result != dT)
           {
             dT = result;
+          }
+
+          if (double.TryParse(TBox?.Text, out result) && result != T)
+          {
+              T = result;
           }
         }
     }

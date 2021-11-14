@@ -106,6 +106,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Output.cs" />
     <Compile Include="Physics\Constants.cs" />
     <Compile Include="Physics\PhysicsCalculations.cs" />
     <Compile Include="Physics\Semiconductor.cs" />
