@@ -8,10 +8,10 @@
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Title="TestWindow" Height="450" Width="800">
     <Grid>
-        <DockPanel Background="GhostWhite" Margin="175,0,0,0">
+        <DockPanel Margin="175,0,0,0">
             <TabControl Margin="0,10,0,0" >
                 <TabItem Header="Mob (Na)">
-                    <WpfPlot Name="wpfPlot1" />
+                    <WpfPlot Name="wpfPlot1"/>
                 </TabItem>
                 <TabItem Header="Mob (T)">
                     <WpfPlot Name="wpfPlot2" />
@@ -32,7 +32,7 @@
              IsReadOnly="True" Margin="10,6,0,0">
             <TextBox.ToolTip>
                 <ToolTip>
-                    <TextBox Text="Задача выполнена для материалов p-типа. Все формулы те же, что и в проекте 3. В первой части подвижность от температуры. Во второй части – ФИКСИРУЕМ ТЕМПЕРАТУРУ. Изменяем только концентрацию примеси.Границы изменений концентраций – от 10^10 до 10^20 в кубическом сантиметре.Опции – выводить как проводимость σ от концентрации, так и удельное сопротивление ρ=1/σ в несистемных единицах Ом*см."
+                    <TextBox Background="#eaeaf2" BorderThickness="0" Text="Задача выполнена для материалов p-типа. Все формулы те же, что и в проекте 3. В первой части подвижность от температуры. Во второй части – ФИКСИРУЕМ ТЕМПЕРАТУРУ. Изменяем только концентрацию примеси.Границы изменений концентраций – от 10^10 до 10^20 в кубическом сантиметре.Опции – выводить как проводимость σ от концентрации, так и удельное сопротивление ρ=1/σ в несистемных единицах Ом*см."
                    TextWrapping="Wrap"
                    Width="300"
                    IsReadOnly="True"/>
@@ -40,16 +40,16 @@
             </TextBox.ToolTip>
         </TextBox>
         <Grid HorizontalAlignment="Left" Height="96" Margin="10,40,0,0" VerticalAlignment="Top" Width="141">
-            <Label Content="Tmin" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Width="35" Margin="5,0,0,0"/>
-            <Label Content="Tmax" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Width="37" Margin="3,31,0,0"/>
-            <Label Content="dT" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="24" Margin="16,62,0,0"/>
+            <Label Content="Tmin" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Width="35" Margin="1,0,0,0"/>
+            <Label Content="Tmax" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Width="37" Margin="1,31,0,0"/>
+            <Label Content="dT" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="24" Margin="3,62,0,0"/>
             <TextBox x:Name="TminBox" HorizontalAlignment="Left" Height="26" Margin="40,0,0,0" TextWrapping="Wrap" Text="{Binding Tmin, Mode=OneTime}" VerticalAlignment="Top" Width="56" TextChanged="TextBoxBase_OnTextChanged"/>
             <TextBox x:Name="TmaxBox" HorizontalAlignment="Left" Height="26" Margin="40,31,0,0" TextWrapping="Wrap" Text="{Binding Tmax, Mode=OneTime}" VerticalAlignment="Top" Width="56" TextChanged="TextBoxBase_OnTextChanged"/>
             <TextBox x:Name="dTBox" HorizontalAlignment="Left" Height="26" Margin="40,62,0,0" TextWrapping="Wrap" Text="{Binding dT, Mode=OneTime}" VerticalAlignment="Top" Width="56" TextChanged="TextBoxBase_OnTextChanged"/>
             <Label Content="K" HorizontalAlignment="Left" Margin="96,0,0,0" VerticalAlignment="Top"/>
             <Label Content="K" HorizontalAlignment="Left" Margin="96,31,0,0" VerticalAlignment="Top"/>
             <Label Content="K" HorizontalAlignment="Left" Margin="96,62,0,0" VerticalAlignment="Top"/>
-            <Label Content="T" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="24" Margin="16,93,0,-21"/>
+            <Label Content="T" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="24" Margin="3,93,0,-21"/>
             <TextBox x:Name="TBox" HorizontalAlignment="Left" Height="26" Margin="40,93,0,-23" TextWrapping="Wrap" Text="{Binding T, Mode=OneTime}" VerticalAlignment="Top" Width="56" TextChanged="TextBoxBase_OnTextChanged"/>
             <Label Content="K" HorizontalAlignment="Left" Margin="96,93,0,-23" VerticalAlignment="Top"/>
         </Grid>
