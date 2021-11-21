@@ -14,7 +14,6 @@ namespace fome_curves
         public List<double> Nd = new List<double>(); //
         public List<double> Na = new List<double>();
         public List<double> DonorConcentration = new List<double>(); //Charged donor concentration
-        public List<double> AcceptorConcentration = new List<double>(); //Charged acceptor concentration
         public List<double> ElectronConcentration = new List<double>(); //Electron concentration
         public List<double> HoleConcentration = new List<double>(); //Hole concentration
         public List<double> Sigma = new List<double>(); //Conductivity

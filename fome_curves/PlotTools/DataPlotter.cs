@@ -13,14 +13,16 @@ namespace fome_curves.PlotTools
         {
             plot.Plot.Clear();
         }
+
         public static void refresh(WpfPlot plot)
         {
             plot.Refresh();
         }
-        public static void plotData(PlotData data, WpfPlot plot)
+
+        public static void plotData(PlotData data, WpfPlot plot, bool logY = false)
         {
-            plot.Plot.AddScatter(data.xData, data.yData);
-            
+            plot.Plot.AddScatter(data.xData, logY ? Tools.Log10(data.yData) : data.yData);
+
             plot.Plot.XLabel(data.xLabel);
             plot.Plot.YLabel(data.yLabel);
         }

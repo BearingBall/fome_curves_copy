@@ -8,6 +8,7 @@ namespace fome_curves.Physics
 {
     class Semiconductor
     {
+        //EV
         public double Eg { get; set; }
         public double Ae { get; set; }
         public double Be { get; set; }

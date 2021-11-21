@@ -8,6 +8,27 @@ namespace fome_curves.Physics
 {
     class PhysicsCalculations
     {
+        const double ElectronVoltInErgs = 1.60218e-12;
+        const double VOLT_IN_CGS = 1.0 / 300;
+
+        public static double electronVoltToErg(double electron_volt)
+        {
+            return electron_volt * ElectronVoltInErgs;
+        }
+        public static double ergToElectronVolt(double erg)
+        {
+            return erg / ElectronVoltInErgs;
+        }
+        //--
+        public static double voltToCgs(double volt)
+        {
+            return volt * VOLT_IN_CGS;
+        }
+        public static double cgsToVolt(double cgs)
+        {
+            return cgs / VOLT_IN_CGS;
+        }
+        //--
         public static double getEffectiveDensityState(double m, double T)
         {
             return 2.51e19 * Math.Pow((m * T / (Constants.m0 * 300.0)), 1.5);
@@ -30,7 +51,7 @@ namespace fome_curves.Physics
 
         public static double getNdPlus(double Eg, double Nd0, double Ed, double Ef, double T)
         {
-            return Nd0 / (1 + Math.Exp((Eg -Ef - Ed) / (Constants.k * T)));
+            return Nd0 / (1 + Math.Exp((Eg - Ef - Ed) / (Constants.k * T)));
         }
 
         public static double getConductivity(double n, double p, double mue, double mup)
@@ -38,7 +59,8 @@ namespace fome_curves.Physics
             return Constants.e * (n * mue + p * mup) * 100;
         }
 
-        public static double func(double Ef, double Nc, double Nv, double T, double Na0, double Nd0, double Eg, double Ea, double Ed)
+        public static double func(double Ef, double Nc, double Nv, double T, double Na0, double Nd0, double Eg,
+            double Ea, double Ed)
         {
             double n = getN(Nc, Eg, Ef, T);
             double p = getP(Nv, Ef, T);
@@ -47,7 +69,8 @@ namespace fome_curves.Physics
             return NdPlus + p - n - NaMinus;
         }
 
-        public static double getFermi(double Nc, double Nv, double T, double Na0, double Nd0, double Eg, double Ea, double Ed)
+        public static double getFermi(double Nc, double Nv, double T, double Na0, double Nd0, double Eg, double Ea,
+            double Ed)
         {
             double left = 0;
             double right = 10.0;
@@ -70,11 +93,13 @@ namespace fome_curves.Physics
                 {
                     break;
                 }
+
                 middle = (left + right) / 2.0;
                 fm = func(middle, Nc, Nv, T, Na0, Nd0, Eg, Ea, Ed);
 
                 ++iterations;
             }
+
             //console.log(middle, fm, Nc, Nv, T, Na0, Nd0, Eg, Ea, Ed);
             return middle;
         }
