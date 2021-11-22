@@ -126,6 +126,18 @@ namespace fome_curves
             }
         }
 
+        public double Ed
+        {
+            get => parameters.Ed;
+            set
+            {
+                parameters.Ed = value;
+                recalculateNaT();
+                recalculateConductivity();
+                recalculateResistivity();
+            }
+        }
+
         public bool logYAxis = false;
         Output fillArrays(Semiconductor semiconductor)
         {
@@ -448,6 +460,11 @@ namespace fome_curves
             if (double.TryParse(NdBox?.Text, out result) && result != Nd)
             {
                 Nd = result;
+            }
+
+            if (double.TryParse(EdBox?.Text, out result) && result != Ed)
+            {
+                Ed = result;
             }
         }
     }
