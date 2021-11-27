@@ -238,13 +238,14 @@ namespace fome_curves
                     semiconductor.Eg, parameters.Ea, parameters.Ed);
                 output.ElectronConcentration.Add(PhysicsCalculations.getN(output.Nc[count], semiconductor.Eg, Ef, T));
                 output.HoleConcentration.Add(PhysicsCalculations.getP(output.Nv[count], Ef, T));
-
+                
                 output.ElectronsMobility.Add(PhysicsCalculations.getMobility(semiconductor.Ae, semiconductor.Be,
-                    parameters.Nd0, n, T));
+                   n, n, T));
                 output.HolesMobility.Add(PhysicsCalculations.getMobility(semiconductor.Ah, semiconductor.Bh,
-                    parameters.Nd0, n, T));
-                output.Sigma.Add(PhysicsCalculations.getConductivity(output.ElectronConcentration[count],
-                    output.HoleConcentration[count], output.ElectronsMobility[count], output.HolesMobility[count]));
+                   n, n, T));
+                output.Sigma.Add(PhysicsCalculations.getConductivity(output.ElectronConcentration[count], output.HoleConcentration[count],
+                    output.ElectronsMobility[count], output.HolesMobility[count]));
+                //output.Sigma.Add(Ef);
                 
                 count++;
             }
@@ -361,7 +362,7 @@ namespace fome_curves
 
         private void recalculateConductivity()
         {
-            var res = fillConductivity(semiconductor, _T);
+            var res = fillConductivity(semiconductor, _T, from: 1e18);
 
             DataPlotter.clear(wpfPlot4);
             DataPlotter.plotData(
@@ -408,6 +409,12 @@ namespace fome_curves
             DataPlotter.refresh(wpfPlot2);
         }
 
+        static string customTickFormatter(double position)
+        {
+            return position.ToString("0.0000E0");
+            
+        }
+
         private void recalculateHoleConcentrationT()
         {
             var res = fillNaFromTemperature(semiconductor);
@@ -419,6 +426,8 @@ namespace fome_curves
                 wpfPlot5, logYAxis);
 
             DataPlotter.refresh(wpfPlot5);
+
+            wpfPlot5.Plot.YAxis.TickLabelFormat(customTickFormatter);
         }
 
         void recalculateEverything()

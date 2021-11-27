@@ -72,8 +72,8 @@ namespace fome_curves.Physics
         public static double getFermi(double Nc, double Nv, double T, double Na0, double Nd0, double Eg, double Ea,
             double Ed)
         {
-            double left = 0;
-            double right = 10.0;
+            double left = -40;
+            double right = 40.0;
             double middle = (left + right) / 2.0;
             double fm = func(middle, Nc, Nv, T, Na0, Nd0, Eg, Ea, Ed);
             double iterations = 0;
