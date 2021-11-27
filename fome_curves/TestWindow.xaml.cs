@@ -60,7 +60,7 @@ namespace fome_curves
 
                 parameters.TMin = value;
                 recalculateMobilityT();
-                recalculateNaT();
+                recalculateHoleConcentrationT();
             }
         }
 
@@ -74,7 +74,7 @@ namespace fome_curves
 
                 parameters.TMax = value;
                 recalculateMobilityT();
-                recalculateNaT();
+                recalculateHoleConcentrationT();
             }
         }
 
@@ -88,7 +88,7 @@ namespace fome_curves
 
                 parameters.TStep = value;
                 recalculateMobilityT();
-                recalculateNaT();
+                recalculateHoleConcentrationT();
             }
         }
 
@@ -110,7 +110,7 @@ namespace fome_curves
                 parameters.Nd0 = value * 1e15;
                 recalculateMobilityNa();
                 recalculateMobilityT();
-                recalculateNaT();
+                recalculateHoleConcentrationT();
             }
         }
 
@@ -122,17 +122,17 @@ namespace fome_curves
                 parameters.Na0 = value * 1e15;
                 recalculateMobilityNa();
                 recalculateMobilityT();
-                recalculateNaT();
+                recalculateHoleConcentrationT();
             }
         }
 
-        public double Ed
+        public double Ea
         {
-            get => parameters.Ed;
+            get => parameters.Ea;
             set
             {
-                parameters.Ed = value;
-                recalculateNaT();
+                parameters.Ea = value;
+                recalculateHoleConcentrationT();
                 recalculateConductivity();
                 recalculateResistivity();
             }
@@ -198,6 +198,7 @@ namespace fome_curves
                     parameters.Nd0,
                     semiconductor.Eg, parameters.Ea, parameters.Ed);
                 output.Na.Add(PhysicsCalculations.getNaMinus(parameters.Na0, parameters.Ea, Ef, t));
+                output.HoleConcentration.Add(PhysicsCalculations.getP(output.Nv[count], Ef, t));
                 ++count;
             }
 
@@ -216,6 +217,8 @@ namespace fome_curves
                     parameters.Nd0, n, T));
                 output.HolesMobility.Add(PhysicsCalculations.getMobility(semiconductor.Ah, semiconductor.Bh,
                     parameters.Nd0, n, T));
+
+
             }
 
             return output;
@@ -242,6 +245,7 @@ namespace fome_curves
                     parameters.Nd0, n, T));
                 output.Sigma.Add(PhysicsCalculations.getConductivity(output.ElectronConcentration[count],
                     output.HoleConcentration[count], output.ElectronsMobility[count], output.HolesMobility[count]));
+                
                 count++;
             }
 
@@ -303,7 +307,7 @@ namespace fome_curves
 
             recalculateMobilityNa();
             recalculateMobilityT();
-            recalculateNaT();
+            recalculateHoleConcentrationT();
             recalculateConductivity();
             recalculateResistivity();
 
@@ -379,8 +383,8 @@ namespace fome_curves
             DataPlotter.plotData(
                 new PlotData()
                 {
-                    xData = res.Na.ToArray(), yData = res.ElectronsMobility.ToArray(), xLabel = "Na, 1/cm³",
-                    yLabel = "Mobility, SM²/Vs"
+                    xData = res.Na.ToArray(), yData = res.HolesMobility.ToArray(), xLabel = "Na, 1/cm³",
+                    yLabel = "Hole Mobility, SM²/Vs"
                 }, wpfPlot1, logYAxis);
 
             wpfPlot1.Plot.XAxis.ManualTickPositions(new double[] {1e10, 1e20}, new string[] {"1e10", "1e20"});
@@ -395,8 +399,8 @@ namespace fome_curves
             DataPlotter.plotData(
                 new PlotData()
                 {
-                    xData = res.T.ToArray(), yData = res.ElectronsMobility.ToArray(), xLabel = "T, K",
-                    yLabel = "Mobility, SM²/Vs"
+                    xData = res.T.ToArray(), yData = res.HolesMobility.ToArray(), xLabel = "T, K",
+                    yLabel = "Hole Mobility, SM²/Vs"
                 }, wpfPlot2, logYAxis);
 
             //wpfPlot1.Plot.Add(plottable);
@@ -404,14 +408,14 @@ namespace fome_curves
             DataPlotter.refresh(wpfPlot2);
         }
 
-        private void recalculateNaT()
+        private void recalculateHoleConcentrationT()
         {
             var res = fillNaFromTemperature(semiconductor);
 
             DataPlotter.clear(wpfPlot5);
             DataPlotter.plotData(
                 new PlotData()
-                    {xData = res.T.ToArray(), yData = res.Na.ToArray(), xLabel = "T, K", yLabel = "Na, 1/cm³"},
+                    {xData = res.T.ToArray(), yData = res.HoleConcentration.ToArray(), xLabel = "T, K", yLabel = "Holes, 1/cm³"},
                 wpfPlot5, logYAxis);
 
             DataPlotter.refresh(wpfPlot5);
@@ -420,7 +424,7 @@ namespace fome_curves
         void recalculateEverything()
         {
             recalculateMobilityT();
-            recalculateNaT();
+            recalculateHoleConcentrationT();
             recalculateMobilityNa();
             recalculateConductivity();
             recalculateResistivity();
@@ -457,14 +461,9 @@ namespace fome_curves
                 Na = result;
             }
 
-            if (double.TryParse(NdBox?.Text, out result) && result != Nd)
+            if (double.TryParse(EaBox?.Text, out result) && result != Ea)
             {
-                Nd = result;
-            }
-
-            if (double.TryParse(EdBox?.Text, out result) && result != Ed)
-            {
-                Ed = result;
+                Ea = result;
             }
         }
     }

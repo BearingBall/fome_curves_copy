@@ -15,10 +15,10 @@
         </Grid.RowDefinitions>
         <DockPanel Margin="175,0,0,0" Grid.RowSpan="3">
             <TabControl Margin="0,10,0,0" >
-                <TabItem Header="e mob (Na)">
+                <TabItem Header="p mob (Na)">
                     <WpfPlot Name="wpfPlot1"/>
                 </TabItem>
-                <TabItem Header="e mob (T)">
+                <TabItem Header="p mob (T)">
                     <WpfPlot Name="wpfPlot2" />
                 </TabItem>
                 <TabItem Header="ρ (Na)">
@@ -63,12 +63,9 @@
             <Label Content="Na" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="24" Margin="3,124,0,-52"/>
             <TextBox x:Name="NaBox" HorizontalAlignment="Left" Height="26" Margin="40,124,0,-54" TextWrapping="Wrap" Text="{Binding Na, Mode=OneTime}" VerticalAlignment="Top" Width="56" TextChanged="TextBoxBase_OnTextChanged"/>
             <Label Content="1e15" HorizontalAlignment="Left" Margin="96,124,0,-54" VerticalAlignment="Top"/>
-            <Label Content="Nd" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="24" Margin="3,153,0,-81"/>
-            <TextBox x:Name="NdBox" HorizontalAlignment="Left" Height="26" Margin="40,153,0,-83" TextWrapping="Wrap" Text="{Binding Nd, Mode=OneTime}" VerticalAlignment="Top" Width="56" TextChanged="TextBoxBase_OnTextChanged"/>
-            <Label Content="1e15" HorizontalAlignment="Left" Margin="96,153,0,-83" VerticalAlignment="Top"/>
-            <Label Content="Ed" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="24" Margin="3,184,0,-112"/>
-            <TextBox x:Name="EdBox" HorizontalAlignment="Left" Height="26" Margin="40,184,0,-114" TextWrapping="Wrap" Text="{Binding Ed, Mode=OneTime}" VerticalAlignment="Top" Width="56" TextChanged="TextBoxBase_OnTextChanged"/>
-            <Label Content="eV" HorizontalAlignment="Left" Margin="96,184,0,-114" VerticalAlignment="Top"/>
+            <Label Content="Ea" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="24" Margin="3,153,0,-81"/>
+            <TextBox x:Name="EaBox" HorizontalAlignment="Left" Height="26" Margin="40,153,0,-83" TextWrapping="Wrap" Text="{Binding Ea, Mode=OneTime}" VerticalAlignment="Top" Width="56" TextChanged="TextBoxBase_OnTextChanged"/>
+            <Label Content="eV" HorizontalAlignment="Left" Margin="96,153,0,-83" VerticalAlignment="Top"/>
         </Grid>
         <ListBox x:Name="MaterialBox" HorizontalAlignment="Left" Height="110" Margin="10,282,0,0" VerticalAlignment="Top" Width="141" SelectionChanged="Selector_OnSelectionChanged" Grid.Row="1"/>
         <Label Content="Material:" HorizontalAlignment="Left" Margin="10,257,0,0" VerticalAlignment="Top" Width="141" Height="25" Grid.Row="1"/>
