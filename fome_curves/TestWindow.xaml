@@ -30,6 +30,9 @@
                 <TabItem Header="Concentration">
                     <WpfPlot Name="wpfPlot5" />
                 </TabItem>
+                <TabItem Header="Concentration (Na)">
+                    <WpfPlot Name="wpfPlot6" />
+                </TabItem>
             </TabControl>
         </DockPanel>
         <TextBox HorizontalAlignment="Left" 

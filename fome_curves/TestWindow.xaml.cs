@@ -99,6 +99,7 @@ namespace fome_curves
             {
                 _T = value;
                 recalculateMobilityNa();
+                recalculateHoleConcentrationNa();
             }
         }
 
@@ -111,6 +112,7 @@ namespace fome_curves
                 recalculateMobilityNa();
                 recalculateMobilityT();
                 recalculateHoleConcentrationT();
+                recalculateHoleConcentrationNa();
             }
         }
 
@@ -135,6 +137,7 @@ namespace fome_curves
                 recalculateHoleConcentrationT();
                 recalculateConductivity();
                 recalculateResistivity();
+                recalculateHoleConcentrationNa();
             }
         }
 
@@ -184,7 +187,7 @@ namespace fome_curves
             return output;
         }
 
-        Output fillNaFromTemperature(Semiconductor semiconductor)
+        Output fillHolesFromTemperature(Semiconductor semiconductor)
         {
             Output output = new Output();
             int count = 0;
@@ -202,6 +205,31 @@ namespace fome_curves
                 ++count;
             }
 
+            return output;
+        }
+
+        Output fillHolesFromNa(Semiconductor semiconductor, double T)
+        {
+            Output output = new Output();
+            int count = 0;
+            double dN = 1e18;
+            double from = 1e18;
+            double to = 1e20;
+
+            for (double n = from; n <= to; n += dN)
+            {
+                output.Na.Add(n);
+                output.Nc.Add(PhysicsCalculations.getEffectiveDensityState(semiconductor.me, T));
+                output.Nv.Add(PhysicsCalculations.getEffectiveDensityState(semiconductor.mh, T));
+
+                var Ef = PhysicsCalculations.getFermi(output.Nc[count], output.Nv[count], T, n,
+                    parameters.Nd0,
+                    semiconductor.Eg, parameters.Ea, parameters.Ed);
+
+                output.HoleConcentration.Add(PhysicsCalculations.getP(output.Nv[count], Ef, T));
+                ++count;
+            }
+            
             return output;
         }
 
@@ -297,6 +325,7 @@ namespace fome_curves
             wpfPlot3.Plot.Style(ScottPlot.Style.Seaborn);
             wpfPlot4.Plot.Style(ScottPlot.Style.Seaborn);
             wpfPlot5.Plot.Style(ScottPlot.Style.Seaborn);
+            wpfPlot6.Plot.Style(ScottPlot.Style.Seaborn);
 
             semiconductors = new List<Semiconductor>()
             {
@@ -417,7 +446,7 @@ namespace fome_curves
 
         private void recalculateHoleConcentrationT()
         {
-            var res = fillNaFromTemperature(semiconductor);
+            var res = fillHolesFromTemperature(semiconductor);
 
             DataPlotter.clear(wpfPlot5);
             DataPlotter.plotData(
@@ -429,7 +458,21 @@ namespace fome_curves
 
             wpfPlot5.Plot.YAxis.TickLabelFormat(customTickFormatter);
         }
+        private void recalculateHoleConcentrationNa()
+        {
+            var res = fillHolesFromNa(semiconductor, _T);
 
+            DataPlotter.clear(wpfPlot6);
+            DataPlotter.plotData(
+                new PlotData()
+                    { xData = res.Na.ToArray(), yData = res.HoleConcentration.ToArray(), xLabel = "Na, 1/cm³", yLabel = "Holes, 1/cm³" },
+                wpfPlot6, logYAxis);
+
+            DataPlotter.refresh(wpfPlot6);
+
+            wpfPlot6.Plot.YAxis.TickLabelFormat(customTickFormatter);
+            wpfPlot6.Plot.XAxis.TickLabelFormat(customTickFormatter);
+        }
         void recalculateEverything()
         {
             recalculateMobilityT();
@@ -437,6 +480,7 @@ namespace fome_curves
             recalculateMobilityNa();
             recalculateConductivity();
             recalculateResistivity();
+            recalculateHoleConcentrationNa();
         }
 
         private void wpfPlot1_MouseMove(object sender, MouseEventArgs e)
