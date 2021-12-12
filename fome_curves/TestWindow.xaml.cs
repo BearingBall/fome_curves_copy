@@ -227,7 +227,8 @@ namespace fome_curves
             double from = 1e10, double to = 1e20)
         {
             Output output = new Output();
-            for (double n = from; n <= to; n += dN)
+            double n = from;
+            while (n <= to)
             {
                 output.Na.Add(n);
 
@@ -236,7 +237,18 @@ namespace fome_curves
                 output.HolesMobility.Add(PhysicsCalculations.getMobility(semiconductor.Ah, semiconductor.Bh,
                     parameters.Nd0, n, T));
 
-
+                if (n < 1e16)
+                {
+                    n += lerp(from, 1e16, n, 1e10, 5e15);// dN / 10;
+                }
+                else if (n < 1e18)
+                {
+                    n += lerp(1e16, 1e18, n, 5e15, 1e18);
+                }
+                else
+                {
+                    n += lerp(1e18, to, n, 1e18, 5e18);
+                }
             }
 
             return output;
@@ -269,13 +281,17 @@ namespace fome_curves
                 
                 count++;
 
-                if (n < 1e18)
+                if (n < 1e16)
                 {
-                    n += lerp(from, 1e18, n, 1e10, dN);// dN / 10;
+                    n += lerp(from, 1e16, n, 1e10, 1e15);// dN / 10;
+                }
+                else if (n < 1e18)
+                {
+                    n += lerp(1e16, 1e18, n, 1e15, 1e17);
                 }
                 else
                 {
-                    n += dN;
+                    n += lerp(1e18, to, n, 1e17, 1e19);
                 }
             }
 
@@ -287,7 +303,7 @@ namespace fome_curves
             double progress = (val - a) / (b - a);
             return from + (to - from) * progress;
         }
-        Output fillResistivity(Semiconductor semiconductor, double T, double dN = 1e17, double from = 1e10,
+        Output fillResistivity(Semiconductor semiconductor, double T, double dN = 1e18, double from = 1e10,
             double to = 1e20)
         {
             var output = fillConductivity(semiconductor, T, dN, from, to);
