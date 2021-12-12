@@ -19,6 +19,7 @@ using ScottPlot;
 using ScottPlot.Plottable;
 using System.Text.Json;
 using fome_curves.PlotTools;
+using ScottPlot.Styles;
 using Color = System.Drawing.Color;
 
 namespace fome_curves
@@ -320,6 +321,7 @@ namespace fome_curves
 
         private Dictionary<int, Action> refreshers;
 
+        private ScottPlot.Styles.IStyle style = ScottPlot.Style.Seaborn;
         public TestWindow()
         {
             //lol without it everything falls apart
@@ -337,13 +339,7 @@ namespace fome_curves
                 {5, recalculateHoleConcentrationNa},
             };
 
-
-            wpfPlot1.Plot.Style(ScottPlot.Style.Seaborn);
-            wpfPlot2.Plot.Style(ScottPlot.Style.Seaborn);
-            wpfPlot3.Plot.Style(ScottPlot.Style.Seaborn);
-            wpfPlot4.Plot.Style(ScottPlot.Style.Seaborn);
-            wpfPlot5.Plot.Style(ScottPlot.Style.Seaborn);
-            wpfPlot6.Plot.Style(ScottPlot.Style.Seaborn);
+            setStyle(style);
 
             semiconductors = new List<Semiconductor>()
             {
@@ -372,6 +368,16 @@ namespace fome_curves
             Tabs.SelectionChanged += TabsOnSelectionChanged;
             Tabs.SelectedIndex = 0;
             recalculateEverything();
+        }
+
+        private void setStyle(IStyle style)
+        {
+            wpfPlot1.Plot.Style(style);
+            wpfPlot2.Plot.Style(style);
+            wpfPlot3.Plot.Style(style);
+            wpfPlot4.Plot.Style(style);
+            wpfPlot5.Plot.Style(style);
+            wpfPlot6.Plot.Style(style);
         }
 
         private void TabsOnSelectionChanged(object sender, SelectionChangedEventArgs e)
