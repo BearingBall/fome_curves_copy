@@ -59,8 +59,7 @@ namespace fome_curves
                     return;
 
                 parameters.TMin = value;
-                recalculateMobilityT();
-                recalculateHoleConcentrationT();
+                recalculateEverything();
             }
         }
 
@@ -73,8 +72,7 @@ namespace fome_curves
                     return;
 
                 parameters.TMax = value;
-                recalculateMobilityT();
-                recalculateHoleConcentrationT();
+                recalculateEverything();
             }
         }
 
@@ -87,8 +85,7 @@ namespace fome_curves
                     return;
 
                 parameters.TStep = value;
-                recalculateMobilityT();
-                recalculateHoleConcentrationT();
+                recalculateEverything();
             }
         }
 
@@ -98,8 +95,7 @@ namespace fome_curves
             set
             {
                 _T = value;
-                recalculateMobilityNa();
-                recalculateHoleConcentrationNa();
+                recalculateEverything();
             }
         }
 
@@ -109,10 +105,7 @@ namespace fome_curves
             set
             {
                 parameters.Nd0 = value * 1e15;
-                recalculateMobilityNa();
-                recalculateMobilityT();
-                recalculateHoleConcentrationT();
-                recalculateHoleConcentrationNa();
+                recalculateEverything();
             }
         }
 
@@ -122,9 +115,7 @@ namespace fome_curves
             set
             {
                 parameters.Na0 = value * 1e15;
-                recalculateMobilityNa();
-                recalculateMobilityT();
-                recalculateHoleConcentrationT();
+                recalculateEverything();
             }
         }
 
@@ -134,10 +125,7 @@ namespace fome_curves
             set
             {
                 parameters.Ea = value;
-                recalculateHoleConcentrationT();
-                recalculateConductivity();
-                recalculateResistivity();
-                recalculateHoleConcentrationNa();
+                recalculateEverything();
             }
         }
 
@@ -330,12 +318,25 @@ namespace fome_curves
         private Semiconductor semiconductor;
         Params parameters = new Params();
 
+        private Dictionary<int, Action> refreshers;
+
         public TestWindow()
         {
             //lol without it everything falls apart
             CultureInfo.CurrentCulture = new CultureInfo("en-US", false);
 
             InitializeComponent();
+
+            refreshers = new Dictionary<int, Action>()
+            {
+                {0, recalculateMobilityNa},
+                {1, recalculateMobilityT},
+                {2, recalculateResistivity},
+                {3, recalculateConductivity},
+                {4, recalculateHoleConcentrationT},
+                {5, recalculateHoleConcentrationNa},
+            };
+
 
             wpfPlot1.Plot.Style(ScottPlot.Style.Seaborn);
             wpfPlot2.Plot.Style(ScottPlot.Style.Seaborn);
@@ -367,6 +368,15 @@ namespace fome_curves
 
             LogX.Checked += switchXAxisLog;
             LogX.Unchecked += switchXAxisLog;
+
+            Tabs.SelectionChanged += TabsOnSelectionChanged;
+            Tabs.SelectedIndex = 0;
+            recalculateEverything();
+        }
+
+        private void TabsOnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            recalculateEverything();
         }
 
         private void switchYAxisLog(object sender, RoutedEventArgs e)
@@ -412,13 +422,13 @@ namespace fome_curves
                     yLabel = "Resistance, Om * cm"
                 }, wpfPlot3, logYAxis, logXAxis);
 
-            wpfPlot3.Plot.XAxis.ManualTickPositions(new double[] {1e10, 1e20}, new string[] {"1e10", "1e20"});
+            
             DataPlotter.refresh(wpfPlot3);
         }
 
         private void recalculateConductivity()
         {
-            var res = fillConductivity(semiconductor, _T, from: 1e18);
+            var res = fillConductivity(semiconductor, _T, from: 1e10);
 
             DataPlotter.clear(wpfPlot4);
             DataPlotter.plotData(
@@ -428,7 +438,6 @@ namespace fome_curves
                     yLabel = "Conductivity, *"
                 }, wpfPlot4, logYAxis, logXAxis);
 
-            wpfPlot4.Plot.XAxis.ManualTickPositions(new double[] {1e10, 1e20}, new string[] {"1e10", "1e20"});
             DataPlotter.refresh(wpfPlot4);
         }
 
@@ -444,7 +453,6 @@ namespace fome_curves
                     yLabel = "Hole Mobility, SM²/Vs"
                 }, wpfPlot1, logYAxis, logXAxis);
 
-            wpfPlot1.Plot.XAxis.ManualTickPositions(new double[] {1e10, 1e20}, new string[] {"1e10", "1e20"});
             DataPlotter.refresh(wpfPlot1);
         }
 
@@ -500,14 +508,22 @@ namespace fome_curves
             wpfPlot6.Plot.YAxis.TickLabelFormat(customTickFormatter);
             wpfPlot6.Plot.XAxis.TickLabelFormat(customTickFormatter);
         }
+
         void recalculateEverything()
         {
-            recalculateMobilityT();
-            recalculateHoleConcentrationT();
-            recalculateMobilityNa();
-            recalculateConductivity();
-            recalculateResistivity();
-            recalculateHoleConcentrationNa();
+            
+            int id = Tabs.SelectedIndex;
+            if(refreshers.TryGetValue(id, out var action))
+            {
+                action();
+            }
+            
+            //recalculateMobilityT();
+            //recalculateHoleConcentrationT();
+            //recalculateMobilityNa();
+            //recalculateConductivity();
+            //recalculateResistivity();
+            //recalculateHoleConcentrationNa();
         }
 
         private void wpfPlot1_MouseMove(object sender, MouseEventArgs e)
