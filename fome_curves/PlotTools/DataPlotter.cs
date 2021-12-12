@@ -19,9 +19,9 @@ namespace fome_curves.PlotTools
             plot.Refresh();
         }
 
-        public static void plotData(PlotData data, WpfPlot plot, bool logY = false)
+        public static void plotData(PlotData data, WpfPlot plot, bool logY = false, bool logX = false)
         {
-            plot.Plot.AddScatter(data.xData, logY ? Tools.Log10(data.yData) : data.yData);
+            plot.Plot.AddScatter(logX ? Tools.Log10(data.xData) : data.xData, logY ? Tools.Log10(data.yData) : data.yData, markerSize: 3);
 
             plot.Plot.XLabel(data.xLabel);
             plot.Plot.YLabel(data.yLabel);

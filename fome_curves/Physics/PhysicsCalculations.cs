@@ -56,7 +56,7 @@ namespace fome_curves.Physics
 
         public static double getConductivity(double n, double p, double mue, double mup)
         {
-            return Constants.e * (n * mue + p * mup) * 100;
+            return Constants.e * (n * mue + p * mup);
         }
 
         public static double func(double Ef, double Nc, double Nv, double T, double Na0, double Nd0, double Eg,

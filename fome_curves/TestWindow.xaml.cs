@@ -142,6 +142,7 @@ namespace fome_curves
         }
 
         public bool logYAxis = false;
+        public bool logXAxis = false;
         Output fillArrays(Semiconductor semiconductor)
         {
             Output output = new Output();
@@ -257,9 +258,11 @@ namespace fome_curves
         {
             Output output = new Output();
             int count = 0;
-            for (double n = from; n <= to; n += dN)
+            double n = from;
+            while (n <= to)//for (double n = from; n <= to; n += dN)
             {
                 output.Na.Add(n);
+                
                 output.Nc.Add(PhysicsCalculations.getEffectiveDensityState(semiconductor.me, T));
                 output.Nv.Add(PhysicsCalculations.getEffectiveDensityState(semiconductor.mh, T));
                 var Ef = PhysicsCalculations.getFermi(output.Nc[count], output.Nv[count], T, n, parameters.Nd0,
@@ -268,20 +271,34 @@ namespace fome_curves
                 output.HoleConcentration.Add(PhysicsCalculations.getP(output.Nv[count], Ef, T));
                 
                 output.ElectronsMobility.Add(PhysicsCalculations.getMobility(semiconductor.Ae, semiconductor.Be,
-                   n, n, T));
+                    parameters.Nd0, n, T));
                 output.HolesMobility.Add(PhysicsCalculations.getMobility(semiconductor.Ah, semiconductor.Bh,
-                   n, n, T));
+                    parameters.Nd0, n, T));
                 output.Sigma.Add(PhysicsCalculations.getConductivity(output.ElectronConcentration[count], output.HoleConcentration[count],
                     output.ElectronsMobility[count], output.HolesMobility[count]));
                 //output.Sigma.Add(Ef);
                 
                 count++;
+
+                if (n < 1e18)
+                {
+                    n += lerp(from, 1e18, n, 1e10, dN);// dN / 10;
+                }
+                else
+                {
+                    n += dN;
+                }
             }
 
             return output;
         }
 
-        Output fillResistivity(Semiconductor semiconductor, double T, double dN = 1e18, double from = 1e18,
+        double lerp(double a, double b, double val, double from, double to)
+        {
+            double progress = (val - a) / (b - a);
+            return from + (to - from) * progress;
+        }
+        Output fillResistivity(Semiconductor semiconductor, double T, double dN = 1e17, double from = 1e10,
             double to = 1e20)
         {
             var output = fillConductivity(semiconductor, T, dN, from, to);
@@ -347,6 +364,9 @@ namespace fome_curves
 
             LogY.Checked += switchYAxisLog;
             LogY.Unchecked += switchYAxisLog;
+
+            LogX.Checked += switchXAxisLog;
+            LogX.Unchecked += switchXAxisLog;
         }
 
         private void switchYAxisLog(object sender, RoutedEventArgs e)
@@ -357,7 +377,14 @@ namespace fome_curves
                 recalculateEverything();
             }
         }
-
+        private void switchXAxisLog(object sender, RoutedEventArgs e)
+        {
+            if (LogX.IsChecked != null)
+            {
+                logXAxis = LogX.IsChecked.Value;
+                recalculateEverything();
+            }
+        }
         (double[], string[]) generatelabels(double from, int steps)
         {
             double[] values = new double[steps];
@@ -383,7 +410,7 @@ namespace fome_curves
                 {
                     xData = res.Na.ToArray(), yData = res.Resistivity.ToArray(), xLabel = "Na, 1/cm³",
                     yLabel = "Resistance, Om * cm"
-                }, wpfPlot3, logYAxis);
+                }, wpfPlot3, logYAxis, logXAxis);
 
             wpfPlot3.Plot.XAxis.ManualTickPositions(new double[] {1e10, 1e20}, new string[] {"1e10", "1e20"});
             DataPlotter.refresh(wpfPlot3);
@@ -399,7 +426,7 @@ namespace fome_curves
                 {
                     xData = res.Na.ToArray(), yData = res.Sigma.ToArray(), xLabel = "Na, 1/cm³",
                     yLabel = "Conductivity, *"
-                }, wpfPlot4, logYAxis);
+                }, wpfPlot4, logYAxis, logXAxis);
 
             wpfPlot4.Plot.XAxis.ManualTickPositions(new double[] {1e10, 1e20}, new string[] {"1e10", "1e20"});
             DataPlotter.refresh(wpfPlot4);
@@ -415,7 +442,7 @@ namespace fome_curves
                 {
                     xData = res.Na.ToArray(), yData = res.HolesMobility.ToArray(), xLabel = "Na, 1/cm³",
                     yLabel = "Hole Mobility, SM²/Vs"
-                }, wpfPlot1, logYAxis);
+                }, wpfPlot1, logYAxis, logXAxis);
 
             wpfPlot1.Plot.XAxis.ManualTickPositions(new double[] {1e10, 1e20}, new string[] {"1e10", "1e20"});
             DataPlotter.refresh(wpfPlot1);
@@ -431,7 +458,7 @@ namespace fome_curves
                 {
                     xData = res.T.ToArray(), yData = res.HolesMobility.ToArray(), xLabel = "T, K",
                     yLabel = "Hole Mobility, SM²/Vs"
-                }, wpfPlot2, logYAxis);
+                }, wpfPlot2, logYAxis, logXAxis);
 
             //wpfPlot1.Plot.Add(plottable);
             //wpfPlot1.Plot.XAxis.ManualTickPositions(new[] { 1e15, 1e19, 1e20 }, new[] { "1e15", "1e19", "1e20" });
@@ -452,7 +479,7 @@ namespace fome_curves
             DataPlotter.plotData(
                 new PlotData()
                     {xData = res.T.ToArray(), yData = res.HoleConcentration.ToArray(), xLabel = "T, K", yLabel = "Holes, 1/cm³"},
-                wpfPlot5, logYAxis);
+                wpfPlot5, logYAxis, logXAxis);
 
             DataPlotter.refresh(wpfPlot5);
 
@@ -466,7 +493,7 @@ namespace fome_curves
             DataPlotter.plotData(
                 new PlotData()
                     { xData = res.Na.ToArray(), yData = res.HoleConcentration.ToArray(), xLabel = "Na, 1/cm³", yLabel = "Holes, 1/cm³" },
-                wpfPlot6, logYAxis);
+                wpfPlot6, logYAxis, logXAxis);
 
             DataPlotter.refresh(wpfPlot6);
 

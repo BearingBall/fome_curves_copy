@@ -11,5 +11,6 @@ namespace fome_curves.Physics
         public static double k = 9.617e-5;
         public static double e = 1.6e-19;
         public static double m0 = 9.11e-28;
+        public static double me = 0.510999895e6; // 9.109e-28 gramm
     }
 }

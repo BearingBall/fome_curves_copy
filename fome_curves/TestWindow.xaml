@@ -72,6 +72,7 @@
         </Grid>
         <ListBox x:Name="MaterialBox" HorizontalAlignment="Left" Height="110" Margin="10,282,0,0" VerticalAlignment="Top" Width="141" SelectionChanged="Selector_OnSelectionChanged" Grid.Row="1"/>
         <Label Content="Material:" HorizontalAlignment="Left" Margin="10,257,0,0" VerticalAlignment="Top" Width="141" Height="25" Grid.Row="1"/>
-        <CheckBox Name="LogY" Content="log Y axis" HorizontalAlignment="Left" Margin="10,237,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+        <CheckBox Name="LogY" Content="log Y axis" HorizontalAlignment="Left" Margin="10,221,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+        <CheckBox x:Name="LogX" Content="log X axis" HorizontalAlignment="Left" Margin="10,236,0,0" VerticalAlignment="Top" Grid.Row="1"/>
     </Grid>
 </Window>
