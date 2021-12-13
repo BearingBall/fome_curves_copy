@@ -130,6 +130,21 @@ namespace fome_curves
             }
         }
 
+        public float MarkerSize
+        {
+            get { return DataPlotter.MarkerSize;}
+            set { DataPlotter.MarkerSize = value; }
+        }
+
+        public double Ed
+        {
+            get => parameters.Ed;
+            set
+            {
+                parameters.Ed = value;
+            }
+        }
+
         public bool logYAxis = false;
         public bool logXAxis = false;
         Output fillArrays(Semiconductor semiconductor)
@@ -338,6 +353,8 @@ namespace fome_curves
         private Dictionary<int, Action> refreshers;
 
         private ScottPlot.Styles.IStyle style = ScottPlot.Style.Seaborn;
+        IStyle[] plotStyles = ScottPlot.Style.GetStyles();
+
         public TestWindow()
         {
             //lol without it everything falls apart
@@ -371,6 +388,8 @@ namespace fome_curves
             recalculateConductivity();
             recalculateResistivity();
 
+            ApplyBtn.Click += ApplyBtnOnClick;
+
             MaterialBox.SelectionMode = SelectionMode.Single;
             MaterialBox.ItemsSource = materials;
             MaterialBox.SelectedIndex = 0;
@@ -383,6 +402,25 @@ namespace fome_curves
 
             Tabs.SelectionChanged += TabsOnSelectionChanged;
             Tabs.SelectedIndex = 0;
+
+            recalculateEverything();
+
+            for (int i = 0; i < plotStyles.Length; i++)
+            {
+                StylesCombo.Items.Add(plotStyles[i].ToString());
+            }
+
+            StylesCombo.SelectedIndex = plotStyles.Length - 1;
+            StylesCombo.SelectionChanged += StylesComboOnSelectionChanged;
+        }
+
+        private void StylesComboOnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            setStyle(plotStyles[StylesCombo.SelectedIndex]);
+        }
+
+        private void ApplyBtnOnClick(object sender, RoutedEventArgs e)
+        {
             recalculateEverything();
         }
 
@@ -582,6 +620,25 @@ namespace fome_curves
             if (double.TryParse(EaBox?.Text, out result) && result != Ea)
             {
                 Ea = result;
+            }
+            
+        }
+
+        private void SettingsTextOnChange(object sender, TextChangedEventArgs e)
+        {
+            if (double.TryParse(MarkerSizeBox?.Text, out var result) && result != DataPlotter.MarkerSize)
+            {
+                DataPlotter.MarkerSize = (float) result;
+            }
+
+            if (double.TryParse(EdBox?.Text, out result) && result != Ed)
+            {
+                Ed = result;
+            }
+
+            if (double.TryParse(NdBox?.Text, out result) && result != Nd)
+            {
+                Nd = result;
             }
         }
     }

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:fome_curves"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
@@ -14,7 +15,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        Title="TestWindow" Height="590.667" Width="884">
+        Title="TestWindow" Height="590.667" Width="1171">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250" />
@@ -56,22 +57,26 @@
             <TextBox x:Name="EaBox" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" Text="{Binding Ea, Mode=OneTime}" VerticalAlignment="Top" Width="56" TextChanged="TextBoxBase_OnTextChanged" Canvas.Left="64" Canvas.Top="198"/>
             <Label Content="eV" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="120" Canvas.Top="198"/>
 
-            <Rectangle HorizontalAlignment="Stretch" Fill="DimGray" Height="1" Width="209" Canvas.Left="14" Canvas.Top="240"/>
-
-            <CheckBox Name="LogY" Content="log Y axis" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Canvas.Left="14" Canvas.Top="259"/>
-            <CheckBox x:Name="LogX" Content="log X axis" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Canvas.Left="111" Canvas.Top="259"/>
+            <materialDesign:Card Padding="10" Margin="0" Canvas.Left="14" Canvas.Top="250">
+                <Canvas Width="200" Height="20">
+                    <CheckBox Name="LogY" Content="log Y axis" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" />
+                    <CheckBox x:Name="LogX" Content="log X axis" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Canvas.Left="111" />
+                </Canvas>
+            </materialDesign:Card>
             <materialDesign:Card Padding="2" Margin="0" Canvas.Left="14" Canvas.Top="305">
-                <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Text="Task 4-p." ></TextBlock>
+                <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Text="Material" ></TextBlock>
             </materialDesign:Card>
             <materialDesign:Card Padding="2" Margin="0" Canvas.Left="14" Canvas.Top="336">
                 <ListBox x:Name="MaterialBox" HorizontalAlignment="Left" Height="110" VerticalAlignment="Top" Width="141" SelectionChanged="Selector_OnSelectionChanged"  />
             </materialDesign:Card>
-            <Rectangle HorizontalAlignment="Stretch" Fill="DimGray" Height="1" Width="209" Canvas.Left="14" Canvas.Top="294"/>
         </Canvas>
         <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3"
                       HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="Black" />
         <DockPanel Grid.Column="2" Grid.RowSpan="3">
-            <TabControl  Name="Tabs">
+            <dragablz:TabablzControl Margin="1" Name="Tabs" >
+                <dragablz:TabablzControl.InterTabController>
+                    <dragablz:InterTabController/>
+                </dragablz:TabablzControl.InterTabController>
                 <TabItem Header="p mob (Na)">
                     <WpfPlot Name="wpfPlot1"/>
                 </TabItem>
@@ -84,13 +89,34 @@
                 <TabItem Header="σ (Na)">
                     <WpfPlot Name="wpfPlot4" />
                 </TabItem>
-                <TabItem Header="Concentration">
+                <TabItem Header="conc (T)">
                     <WpfPlot Name="wpfPlot5" />
                 </TabItem>
-                <TabItem Header="Concentration (Na)">
+                <TabItem Header="conc (Na)">
                     <WpfPlot Name="wpfPlot6" />
                 </TabItem>
-            </TabControl>
+                <TabItem Header="Settings">
+                    <Canvas Background="#FFF0F1FF">
+                        <materialDesign:Card Padding="5" Margin="0" Canvas.Left="12" Canvas.Top="10">
+                            <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Text="Plot settings" ></TextBlock>
+                        </materialDesign:Card>
+                        <Label Content="Marker size" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Canvas.Left="12" Canvas.Top="50"/>
+                        <TextBox Canvas.Left="100" Canvas.Top="50" x:Name="MarkerSizeBox" Text="{Binding MarkerSize, Mode=OneTime}" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="56" TextChanged="SettingsTextOnChange" />
+                        <ComboBox  Style="{DynamicResource MaterialDesignOutlinedComboBox}" Name="StylesCombo" Text="Style" Canvas.Left="12" Canvas.Top="90"></ComboBox>
+
+                        <materialDesign:Card Padding="5" Margin="0" Canvas.Left="300" Canvas.Top="10">
+                            <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Text="Physics settings" ></TextBlock>
+                        </materialDesign:Card>
+                        <Label Content="Ed" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Canvas.Left="300" Canvas.Top="50"/>
+                        <TextBox x:Name="EdBox" Canvas.Left="350" Canvas.Top="50"  Text="{Binding Ed, Mode=OneTime}" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="56" TextChanged="SettingsTextOnChange" />
+                        <Label Content="Nd" Canvas.Left="300" Canvas.Top="90" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" />
+                        <TextBox x:Name="NdBox" Canvas.Left="350" Canvas.Top="90"  Text="{Binding Nd, Mode=OneTime}" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="56" TextChanged="SettingsTextOnChange" />
+
+                        <Button Name="ApplyBtn" Content="Apply" Width="75" Canvas.Left="20" Canvas.Top="300"/>
+                    </Canvas>
+                </TabItem>
+                
+            </dragablz:TabablzControl>
         </DockPanel>
     </Grid>
 </Window>

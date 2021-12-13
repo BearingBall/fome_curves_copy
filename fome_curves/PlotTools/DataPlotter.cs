@@ -9,6 +9,10 @@ namespace fome_curves.PlotTools
 {
     class DataPlotter
     {
+        public static float MarkerSize { get; set; } = 3;
+        public static float xTicks { get; set; } = 10;
+        public static float yTicks { get; set; } = 10;
+
         public static void clear(WpfPlot plot)
         {
             plot.Plot.Clear();
@@ -19,7 +23,7 @@ namespace fome_curves.PlotTools
             plot.Refresh();
         }
 
-        public static void plotData(PlotData data, WpfPlot plot, bool logY = false, bool logX = false, int xTicks = 10, int yTicks = 10)
+        public static void plotData(PlotData data, WpfPlot plot, bool logY = false, bool logX = false)
         {
             var maxY = data.yData.Max();
             var minY = data.yData.Min();
@@ -27,7 +31,7 @@ namespace fome_curves.PlotTools
             var maxX = data.xData.Max();
             var minX = data.xData.Min();
 
-            plot.Plot.AddScatter(logX ? Tools.Log10(data.xData) : data.xData, logY ? Tools.Log10(data.yData) : data.yData, markerSize: 3);
+            plot.Plot.AddScatter(logX ? Tools.Log10(data.xData) : data.xData, logY ? Tools.Log10(data.yData) : data.yData, markerSize: MarkerSize);
 
             plot.Plot.XLabel(data.xLabel);
             plot.Plot.YLabel(data.yLabel);
