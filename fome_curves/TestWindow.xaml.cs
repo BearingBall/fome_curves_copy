@@ -362,6 +362,8 @@ namespace fome_curves
 
             InitializeComponent();
 
+            Tabs.FixedHeaderCount = Tabs.Items.Count;
+
             refreshers = new Dictionary<int, Action>()
             {
                 {0, recalculateMobilityNa},

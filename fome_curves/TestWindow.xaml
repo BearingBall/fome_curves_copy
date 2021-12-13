@@ -73,7 +73,7 @@
         <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3"
                       HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="Black" />
         <DockPanel Grid.Column="2" Grid.RowSpan="3">
-            <dragablz:TabablzControl Margin="1" Name="Tabs" >
+            <dragablz:TabablzControl Margin="0" Name="Tabs" >
                 <dragablz:TabablzControl.InterTabController>
                     <dragablz:InterTabController/>
                 </dragablz:TabablzControl.InterTabController>
