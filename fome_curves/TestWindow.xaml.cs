@@ -437,7 +437,7 @@ namespace fome_curves
 
         private void ApplyBtnOnClick(object sender, RoutedEventArgs e)
         {
-            recalculateEverything();
+            System.Diagnostics.Process.Start(@"https://github.com/BearingBall/fome_curves_copy");
         }
 
         private void setStyle(IStyle style)

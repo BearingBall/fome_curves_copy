@@ -15,7 +15,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        Title="TestWindow" Height="590.667" Width="1171">
+        Title="Irvin Curves" Height="590.667" Width="1171" Icon="ico/logo.ico">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250" />
@@ -112,11 +112,19 @@
                         <Label Content="Nd" Canvas.Left="300" Canvas.Top="90" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" />
                         <Label Content="* 1e15" Canvas.Left="410" Canvas.Top="90" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" />
                         <TextBox x:Name="NdBox" Canvas.Left="350" Canvas.Top="90"  Text="{Binding Nd, Mode=OneTime}" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="56" TextChanged="SettingsTextOnChange" />
+                      
+                        <Button Name="ApplyBtn" Height="50" Background="Transparent" Canvas.Left="20" Canvas.Top="200">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="ico/git.png" RenderOptions.BitmapScalingMode="HighQuality" Width="40" Height="40"/>
+                                <TextBlock Text=" Source code" Foreground="Black" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
 
-                        <Button Name="ApplyBtn" Content="Apply" Width="75" Canvas.Left="20" Canvas.Top="300"/>
+
                     </Canvas>
                 </TabItem>
                 
+
             </dragablz:TabablzControl>
         </DockPanel>
     </Grid>
