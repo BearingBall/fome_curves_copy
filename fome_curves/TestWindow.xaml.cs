@@ -218,10 +218,11 @@ namespace fome_curves
             Output output = new Output();
             int count = 0;
             double dN = 1e18;
-            double from = 1e18;
+            double from = 1e13;
             double to = 1e20;
 
-            for (double n = from; n <= to; n += dN)
+            double n = from;
+            while (n <= to)
             {
                 output.Na.Add(n);
                 output.Nc.Add(PhysicsCalculations.getEffectiveDensityState(semiconductor.me, T));
@@ -233,6 +234,19 @@ namespace fome_curves
 
                 output.HoleConcentration.Add(PhysicsCalculations.getP(output.Nv[count], Ef, T));
                 ++count;
+
+                if (n < 1e16)
+                {
+                    n += lerp(from, 1e16, n, 1e10, 5e15);// dN / 10;
+                }
+                else if (n < 1e18)
+                {
+                    n += lerp(1e16, 1e18, n, 5e15, 1e18);
+                }
+                else
+                {
+                    n += lerp(1e18, to, n, 1e18, 5e18);
+                }
             }
             
             return output;
