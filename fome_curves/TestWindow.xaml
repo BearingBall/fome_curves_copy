@@ -23,8 +23,8 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Canvas Grid.Column="0" Background="#FFF0F1FF">
-            <materialDesign:Card Padding="5" Margin="0" Width="103" Canvas.Left="12" Canvas.Top="5">
-                <TextBlock Style="{DynamicResource MaterialDesignBody2TextBlock}" Text="Task 4-p" >
+            <materialDesign:Card Padding="10 5 10 5" Margin="0" Canvas.Left="12" Canvas.Top="5">
+                <TextBlock TextAlignment="Center" Width="200" Style="{DynamicResource MaterialDesignBody2TextBlock}" Text="Task 4-p" >
                     <TextBlock.ToolTip>
                         <ToolTip>
                             <TextBox Background="#eaeaf2" BorderThickness="0" Text="Задача выполнена для материалов p-типа. Все формулы те же, что и в проекте 3. В первой части подвижность от температуры. Во второй части – ФИКСИРУЕМ ТЕМПЕРАТУРУ. Изменяем только концентрацию примеси.Границы изменений концентраций – от 10^10 до 10^20 в кубическом сантиметре.Опции – выводить как проводимость σ от концентрации, так и удельное сопротивление ρ=1/σ в несистемных единицах Ом*см."
@@ -63,11 +63,11 @@
                     <CheckBox x:Name="LogX" Content="log X axis" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Canvas.Left="111" />
                 </Canvas>
             </materialDesign:Card>
-            <materialDesign:Card Padding="2" Margin="0" Canvas.Left="14" Canvas.Top="305">
-                <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Text="Material" ></TextBlock>
+            <materialDesign:Card Padding="10 2 10 1" Margin="0" Canvas.Left="14" Canvas.Top="305">
+                <TextBlock TextAlignment="Center" Width="200" Style="{DynamicResource MaterialDesignCaptionTextBlock}" Text="Material" ></TextBlock>
             </materialDesign:Card>
-            <materialDesign:Card Padding="2" Margin="0" Canvas.Left="14" Canvas.Top="336">
-                <ListBox x:Name="MaterialBox" HorizontalAlignment="Left" Height="110" VerticalAlignment="Top" Width="141" SelectionChanged="Selector_OnSelectionChanged"  />
+            <materialDesign:Card Padding="10 2 10 2" Margin="0" Canvas.Left="14" Canvas.Top="336">
+                <ListBox HorizontalContentAlignment="Center" x:Name="MaterialBox" HorizontalAlignment="Left" Height="110" VerticalAlignment="Top" Width="200" SelectionChanged="Selector_OnSelectionChanged"  />
             </materialDesign:Card>
         </Canvas>
         <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3"
@@ -110,6 +110,7 @@
                         <Label Content="Ed" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Canvas.Left="300" Canvas.Top="50"/>
                         <TextBox x:Name="EdBox" Canvas.Left="350" Canvas.Top="50"  Text="{Binding Ed, Mode=OneTime}" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="56" TextChanged="SettingsTextOnChange" />
                         <Label Content="Nd" Canvas.Left="300" Canvas.Top="90" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" />
+                        <Label Content="* 1e15" Canvas.Left="410" Canvas.Top="90" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" />
                         <TextBox x:Name="NdBox" Canvas.Left="350" Canvas.Top="90"  Text="{Binding Nd, Mode=OneTime}" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="56" TextChanged="SettingsTextOnChange" />
 
                         <Button Name="ApplyBtn" Content="Apply" Width="75" Canvas.Left="20" Canvas.Top="300"/>
