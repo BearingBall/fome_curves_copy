@@ -459,9 +459,6 @@ namespace fome_curves
                 wpfPlots[i].Plot.XAxis.Color(axisColor);
                 wpfPlots[i].Plot.YAxis.Color(axisColor);
             }
-            
-
-            wpfPlot1.Plot.XAxis.Color(System.Drawing.Color.Black);
         }
 
         private void TabsOnSelectionChanged(object sender, SelectionChangedEventArgs e)
