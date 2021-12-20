@@ -442,12 +442,26 @@ namespace fome_curves
 
         private void setStyle(IStyle style)
         {
-            wpfPlot1.Plot.Style(style);
-            wpfPlot2.Plot.Style(style);
-            wpfPlot3.Plot.Style(style);
-            wpfPlot4.Plot.Style(style);
-            wpfPlot5.Plot.Style(style);
-            wpfPlot6.Plot.Style(style);
+            List<WpfPlot> wpfPlots = new List<WpfPlot>()
+            {
+                wpfPlot1,
+                wpfPlot2,
+                wpfPlot3,
+                wpfPlot4,
+                wpfPlot5,
+                wpfPlot6,
+            };
+
+            for (int i = 0; i < wpfPlots.Count; i++)
+            {
+                wpfPlots[i].Plot.Style(style);
+                var axisColor = style is ScottPlot.Styles.Black ? Color.White : Color.Black;
+                wpfPlots[i].Plot.XAxis.Color(axisColor);
+                wpfPlots[i].Plot.YAxis.Color(axisColor);
+            }
+            
+
+            wpfPlot1.Plot.XAxis.Color(System.Drawing.Color.Black);
         }
 
         private void TabsOnSelectionChanged(object sender, SelectionChangedEventArgs e)
